@@ -1,0 +1,28 @@
+name: Sync GitHub to CodeUp
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  sync-to-codeup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout GitHub code
+        uses: actions/checkout@v3
+
+      - name: Configure Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+      - name: Add CodeUp remote
+        run: |
+          git remote add codeup https://<username>:<personal-access-token>@codeup.aliyun.com/<org>/<repo>.git
+
+      - name: Push to CodeUp
+        run: |
+          git push codeup main --force
+          git push codeup develop --force
